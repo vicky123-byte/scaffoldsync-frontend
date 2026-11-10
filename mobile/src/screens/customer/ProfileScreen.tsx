@@ -1,0 +1,8 @@
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { AppButton, AppField, Card, PageHeading } from '../../components/UI';
+import { theme } from '../../theme';
+export function ProfileScreen() {
+ return <><PageHeading title="Profil Pelanggan" subtitle="Kelola informasi akun dan lokasi proyek tersimpan."/><Card><View style={styles.avatar}><Text style={styles.avatarText}>B</Text></View><Text style={styles.name}>Budi Santoso</Text><Text style={styles.email}>customer@scaffoldsync.local</Text><AppField label="Nama Lengkap" defaultValue="Budi Santoso"/><AppField label="Nomor Telepon" defaultValue="0812-3456-7890"/><AppField label="Perusahaan" defaultValue="CV Maju Jaya"/><AppField label="Alamat" defaultValue="Jakarta Pusat" multiline/><Text style={styles.section}>Lokasi Proyek Tersimpan</Text><Text style={styles.caption}>Proyek A · Jl. Sudirman No. 123, Jakarta Pusat</Text><AppButton title="Tambah Lokasi Proyek" variant="secondary" onPress={()=>{}}/><AppButton title="Simpan Perubahan" onPress={()=>{}}/><AppButton title="Ubah Password" variant="outline" onPress={()=>{}}/></Card></>;
+}
+const styles=StyleSheet.create({avatar:{height:60,width:60,borderRadius:30,backgroundColor:theme.colors.primary,alignItems:'center',justifyContent:'center',alignSelf:'center'},avatarText:{fontSize:24,color:'#FFFFFF',fontWeight:'900'},name:{textAlign:'center',fontSize:15,color:theme.colors.navy,fontWeight:'900',marginTop:10},email:{textAlign:'center',fontSize:10,color:theme.colors.muted,marginBottom:14},section:{fontSize:12,color:theme.colors.navy,fontWeight:'900',marginTop:12},caption:{fontSize:10,color:theme.colors.muted,marginTop:6}});

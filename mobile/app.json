@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "ScaffoldSync",
+    "slug": "scaffoldsync-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {"backgroundColor": "#F3F6FB"},
+    "android": {"package": "com.scaffoldsync.mobile", "adaptiveIcon": {"backgroundColor": "#397CAC"}},
+    "ios": {"supportsTablet": true}
+  }
+}

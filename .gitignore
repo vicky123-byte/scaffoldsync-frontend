@@ -1,0 +1,20 @@
+# Node / Expo
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+npm-debug.log*
+
+# PHP local / environment
+.env
+.env.*
+!.env.example
+/web/storage/
+/web/uploads/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

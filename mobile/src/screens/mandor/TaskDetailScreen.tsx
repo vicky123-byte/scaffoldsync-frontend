@@ -1,0 +1,6 @@
+import React from 'react';
+import { Alert, Text } from 'react-native';
+import { AppButton, AppBadge, Card, PageHeading } from '../../components/UI';
+export function TaskDetailScreen({ navigate }: { navigate:(screen:'inspection')=>void }) {
+ return <><PageHeading title="Detail Tugas Lapangan" subtitle="SJ-0012 · Pengiriman scaffolding"/><Card><AppBadge text="Pengiriman" tone="blue"/><Text style={{fontSize:14,fontWeight:'900',color:'#1E2E46',marginTop:10}}>CV Maju Jaya · Proyek A</Text><Text style={{fontSize:11,color:'#718198',marginTop:6}}>Jl. Sudirman No. 123, Jakarta Pusat</Text><Text style={{fontSize:11,color:'#718198',lineHeight:18,marginTop:10}}>Catatan: Akses truk dari gerbang samping. Hubungi penerima sebelum tiba.</Text><Text style={{fontSize:12,fontWeight:'900',color:'#1E2E46',marginTop:17}}>Barang yang dibawa</Text><Text style={{fontSize:11,color:'#34465E',lineHeight:22,marginTop:6}}>• Scaffolding 2x1 m — 40 unit{ '\n' }• Jackbase 1.2 m — 80 unit</Text><AppButton title="Buka Navigasi (simulasi)" variant="secondary" onPress={()=>Alert.alert('Navigasi','Maps akan dibuka setelah integrasi lokasi.')}/><AppButton title="Mulai Checklist Inspeksi" onPress={()=>navigate('inspection')}/></Card></>;
+}

@@ -1,0 +1,78 @@
+import React, { useMemo, useState } from 'react';
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, Pressable, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { AppHeader } from '../components/AppHeader';
+import { BottomNavigation } from '../components/BottomNavigation';
+import { OfflineBanner } from '../components/OfflineBanner';
+import { FeedbackSheet } from '../components/FeedbackSheet';
+import { ScreenName, AppRole, SheetName } from '../types/navigation';
+import { Product, products } from '../data/mockData';
+import { theme } from '../theme';
+import { LoginScreen } from '../screens/auth/LoginScreen';
+import { RegisterScreen } from '../screens/auth/RegisterScreen';
+import { HomeScreen } from '../screens/customer/HomeScreen';
+import { CatalogScreen } from '../screens/customer/CatalogScreen';
+import { ProductDetailScreen } from '../screens/customer/ProductDetailScreen';
+import { CartScreen } from '../screens/customer/CartScreen';
+import { ProjectFormScreen } from '../screens/customer/ProjectFormScreen';
+import { RentalsScreen } from '../screens/customer/RentalsScreen';
+import { RentalDetailScreen } from '../screens/customer/RentalDetailScreen';
+import { UploadPaymentScreen } from '../screens/customer/UploadPaymentScreen';
+import { ProfileScreen } from '../screens/customer/ProfileScreen';
+import { HelpScreen } from '../screens/customer/HelpScreen';
+import { FavoritesScreen } from '../screens/customer/FavoritesScreen';
+import { NotificationsScreen } from '../screens/customer/NotificationsScreen';
+import { MandorDashboardScreen } from '../screens/mandor/MandorDashboardScreen';
+import { TaskDetailScreen } from '../screens/mandor/TaskDetailScreen';
+import { InspectionScreen } from '../screens/mandor/InspectionScreen';
+import { PhotoEvidenceScreen } from '../screens/mandor/PhotoEvidenceScreen';
+import { SignatureScreen } from '../screens/mandor/SignatureScreen';
+import { BastScreen } from '../screens/mandor/BastScreen';
+
+export function RootNavigator() {
+ const [role,setRole]=useState<AppRole>('pelanggan');
+ const [screen,setScreen]=useState<ScreenName>('login');
+ const [sheet,setSheet]=useState<SheetName>(null);
+ const [offline,setOffline]=useState(false);
+ const [toast,setToast]=useState('');
+ const [filter,setFilter]=useState('Semua');
+ const [product,setProduct]=useState<Product>(products[0]);
+ const [cartItems,setCartItems]=useState<Record<string,number>>({});
+ const [favoriteIds,setFavoriteIds]=useState<string[]>(['p1','p3']);
+ const [hasRentals,setHasRentals]=useState(true);
+ const navigate=(next:ScreenName)=>setScreen(next);
+ const notify=(message:string)=>setToast(message);
+ const cartLines=useMemo(()=>products.filter(p=>(cartItems[p.id]??0)>0).map(p=>({product:p,quantity:cartItems[p.id] ?? 0})),[cartItems]);
+ const toggleFavorite=(id:string)=>setFavoriteIds(v=>v.includes(id)?v.filter(x=>x!==id):[...v,id]);
+ const login=(selectedRole:AppRole)=>{setRole(selectedRole);setScreen(selectedRole==='pelanggan'?'home':'mandorDashboard');};
+ const chooseProduct=(selected:Product)=>{setProduct(selected);setScreen('productDetail');};
+ const addToCart=(selected:Product,qty:number)=>{setCartItems(v=>({...v,[selected.id]:Math.min(selected.stock,(v[selected.id]??0)+qty)}));setToast('Barang ditambahkan ke keranjang.');setScreen('cart');};
+ const content=()=>{
+  switch(screen){
+   case 'login': return <LoginScreen onLogin={login} onRegister={()=>navigate('register')}/>;
+   case 'register': return <RegisterScreen onComplete={()=>{notify('Pendaftaran demo berhasil. Silakan lengkapi profil setelah masuk.');login('pelanggan');}} backToLogin={()=>navigate('login')}/>;
+   case 'home': return <HomeScreen navigate={navigate} selectProduct={chooseProduct}/>;
+   case 'catalog': return <CatalogScreen selectProduct={chooseProduct} openFilter={()=>setSheet('filter')} openErrors={()=>setSheet('errors')} filter={filter} setFilter={setFilter}/>;
+   case 'productDetail': return <ProductDetailScreen product={product} addToCart={addToCart} isFavorite={favoriteIds.includes(product.id)} toggleFavorite={()=>toggleFavorite(product.id)}/>;
+   case 'cart': return <CartScreen items={cartLines} setQty={(id,n)=>setCartItems(v=>({...v,[id]:n}))} removeItem={(id)=>setCartItems(v=>{const next={...v};delete next[id];return next;})} navigate={(s)=>navigate(s)}/>;
+   case 'projectForm': return <ProjectFormScreen onSubmit={()=>{setHasRentals(true);setCartItems({});notify('Pengajuan sewa berhasil dikirim pada simulasi.');navigate('rentals');}}/>;
+   case 'rentals': return <RentalsScreen navigate={()=>navigate('rentalDetail')} empty={!hasRentals} toggleEmpty={()=>setHasRentals(v=>!v)}/>;
+   case 'rentalDetail': return <RentalDetailScreen navigate={(s)=>navigate(s)}/>;
+   case 'uploadPayment': return <UploadPaymentScreen openPhotoSource={()=>setSheet('photoSource')} onSent={()=>{notify('Bukti pembayaran diterima pada simulasi.');navigate('rentalDetail');}}/>;
+   case 'profile': return <ProfileScreen/>;
+   case 'favorites': return <FavoritesScreen products={products.filter(p=>favoriteIds.includes(p.id))} selectProduct={chooseProduct} toggleFavorite={toggleFavorite}/>;
+   case 'notifications': return <NotificationsScreen/>;
+   case 'help': return <HelpScreen/>;
+   case 'mandorDashboard': return <MandorDashboardScreen navigate={()=>navigate('taskDetail')} offline={offline} toggleOffline={()=>setOffline(v=>!v)}/>;
+   case 'taskDetail': return <TaskDetailScreen navigate={(s)=>navigate(s)}/>;
+   case 'inspection': return <InspectionScreen navigate={()=>navigate('photoEvidence')}/>;
+   case 'photoEvidence': return <PhotoEvidenceScreen navigate={()=>navigate('signature')}/>;
+   case 'signature': return <SignatureScreen navigate={()=>navigate('bast')}/>;
+   case 'bast': return <BastScreen openIssue={()=>setSheet('issue')} finish={()=>setSheet('finish')}/>;
+   default: return <LoginScreen onLogin={login} onRegister={()=>navigate('register')}/>;
+  }
+ };
+ const isGuest=screen==='login'||screen==='register';
+ return <SafeAreaView style={styles.safe}><StatusBar style="dark"/>{isGuest?null:<AppHeader role={role} offline={offline} onToggleOffline={()=>setOffline(v=>!v)}/ >}{offline&&!isGuest?<OfflineBanner/>:null}{toast&&!isGuest?<Pressable style={styles.toast} onPress={()=>setToast('')}><Text style={styles.toastText}>ⓘ {toast}   ×</Text></Pressable>:null}<ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={[styles.content,isGuest&&styles.guestContent]}>{content()}</ScrollView>{!isGuest?<BottomNavigation role={role} active={screen} navigate={navigate}/>:null}<FeedbackSheet type={sheet} close={()=>setSheet(null)} chooseFilter={setFilter} notify={notify}/></SafeAreaView>;
+}
+const styles=StyleSheet.create({safe:{flex:1,backgroundColor:theme.colors.background},content:{padding:17,paddingBottom:28},guestContent:{flexGrow:1,justifyContent:'center'},toast:{backgroundColor:'#E8F3FD',padding:10,alignItems:'center'},toastText:{fontSize:10,color:theme.colors.primaryDark,fontWeight:'700'}});

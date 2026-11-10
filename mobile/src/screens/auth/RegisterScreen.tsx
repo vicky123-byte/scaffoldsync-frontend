@@ -1,0 +1,6 @@
+import React from 'react';
+import { Text } from 'react-native';
+import { AppButton, AppField, Card, PageHeading } from '../../components/UI';
+export function RegisterScreen({ onComplete, backToLogin }: { onComplete:()=>void; backToLogin:()=>void }) {
+ return <><PageHeading title="Daftar Akun Pelanggan" subtitle="Buat akun untuk mengajukan penyewaan scaffolding."/><Card><AppField label="Nama Lengkap" placeholder="Nama sesuai identitas"/><AppField label="Nama Perusahaan" placeholder="Nama perusahaan (opsional)"/><AppField label="Email" placeholder="nama@email.com" keyboardType="email-address" autoCapitalize="none"/><AppField label="Nomor Telepon" placeholder="08xxxxxxxxxx" keyboardType="phone-pad"/><AppField label="Alamat" placeholder="Alamat pelanggan" multiline/><AppField label="Kata Sandi" placeholder="Minimal 8 karakter" secureTextEntry/><AppField label="Konfirmasi Kata Sandi" placeholder="Ulangi kata sandi" secureTextEntry/><AppButton title="Buat Akun" onPress={onComplete}/><AppButton title="Kembali ke Login" variant="secondary" onPress={backToLogin}/><Text style={{fontSize:9,color:'#718198',lineHeight:15,marginTop:10}}>Prototype: data pendaftaran belum disimpan ke server.</Text></Card></>;
+}

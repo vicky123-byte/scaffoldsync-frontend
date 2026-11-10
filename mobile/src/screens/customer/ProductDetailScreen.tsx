@@ -1,0 +1,10 @@
+import React, { useState } from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { AppBadge, AppButton, Card, PageHeading, Row } from '../../components/UI';
+import { Product, formatRupiah } from '../../data/mockData';
+import { theme } from '../../theme';
+export function ProductDetailScreen({ product, addToCart, isFavorite, toggleFavorite }: { product:Product; addToCart:(product:Product,qty:number)=>void; isFavorite:boolean; toggleFavorite:()=>void }) {
+ const [qty,setQty]=useState(1);
+ return <><PageHeading title="Detail Barang" subtitle={`${product.code} · ${product.category}`}/><Card><View style={styles.hero}><Text style={{fontSize:64,color:theme.colors.primary}}>▦</Text></View><Text style={styles.name}>{product.name}</Text><AppBadge text={`Stok tersedia ${product.stock}`} tone="green"/><Text style={styles.description}>{product.description}</Text><Text style={styles.price}>{formatRupiah(product.dailyPrice)} <Text style={styles.unit}>/unit/hari</Text></Text><Text style={styles.label}>Jumlah Unit</Text><Row><AppButton title="−" variant="secondary" onPress={()=>setQty(v=>Math.max(1,v-1))}/><Text style={styles.qty}>{qty}</Text><AppButton title="＋" variant="secondary" onPress={()=>setQty(v=>Math.min(product.stock,v+1))}/></Row><AppButton title={isFavorite?'Hapus dari Favorit':'Simpan ke Favorit'} variant="secondary" onPress={toggleFavorite}/><AppButton title="Tambah ke Keranjang" onPress={()=>addToCart(product,qty)}/></Card></>;
+}
+const styles=StyleSheet.create({hero:{height:145,backgroundColor:'#E8F2FA',borderRadius:12,alignItems:'center',justifyContent:'center',marginBottom:15},name:{fontSize:17,fontWeight:'900',color:theme.colors.navy,marginBottom:9},description:{fontSize:12,color:theme.colors.muted,lineHeight:19,marginTop:13},price:{fontSize:17,fontWeight:'900',color:theme.colors.primary,marginTop:13},unit:{fontSize:10,fontWeight:'500',color:theme.colors.muted},label:{fontSize:11,color:theme.colors.text,fontWeight:'800',marginTop:16,marginBottom:3},qty:{fontSize:16,fontWeight:'900',color:theme.colors.navy,minWidth:35,textAlign:'center'}});

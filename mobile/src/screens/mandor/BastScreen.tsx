@@ -1,0 +1,8 @@
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import { AppBadge, AppButton, Card, PageHeading } from '../../components/UI';
+import { theme } from '../../theme';
+export function BastScreen({ openIssue, finish }: { openIssue:()=>void; finish:()=>void }) {
+ return <><PageHeading title="Ringkasan Surat Jalan Digital" subtitle="Pratinjau berita acara serah terima barang."/><Card><View style={styles.row}><Text style={styles.title}>BAST · SJ-0012</Text><AppBadge text="Draf" tone="orange"/></View><Text style={styles.caption}>ScaffoldSync · 10 November 2026</Text><View style={styles.divider}/>{[['Pelanggan','CV Maju Jaya'],['Lokasi','Proyek A - Jakarta'],['Barang','Scaffolding 2x1 m (40 unit)'],['Kondisi','Checklist inspeksi selesai'],['Tanda tangan','Menunggu konfirmasi digital']].map(([k,v])=><View key={k} style={styles.line}><Text style={styles.key}>{k}</Text><Text style={styles.value}>{v}</Text></View>)}<AppButton title="Laporkan Kendala Lapangan" variant="secondary" onPress={openIssue}/><AppButton title="Selesaikan Tugas" onPress={finish}/></Card></>;
+}
+const styles=StyleSheet.create({row:{flexDirection:'row',justifyContent:'space-between',alignItems:'center'},title:{fontSize:14,fontWeight:'900',color:theme.colors.navy},caption:{fontSize:10,color:theme.colors.muted,marginTop:5},divider:{height:1,backgroundColor:theme.colors.border,marginVertical:13},line:{flexDirection:'row',justifyContent:'space-between',gap:12,marginVertical:7},key:{fontSize:10,color:theme.colors.muted},value:{fontSize:10,color:theme.colors.text,fontWeight:'700',flex:1,textAlign:'right'}});
