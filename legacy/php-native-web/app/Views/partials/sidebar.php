@@ -1,0 +1,3 @@
+<aside class="sidebar" id="sidebar"><a class="brand" href="?page=dashboard"><span class="brand-mark">S</span><span><b>Scaffold<span>Sync</span></b><small>CONSTRUCTION CONNECTIVITY</small></span></a><nav aria-label="Navigasi utama">
+<?php foreach ($menus as [$key,$label,$icon]): ?><a class="nav-link <?= $page===$key?'active':'' ?>" href="?page=<?= h($key) ?>"><span><?= $icon ?></span><?= h($label) ?></a><?php endforeach; ?>
+</nav><div class="side-user"><div class="avatar"><?= h(substr(current_name(),0,1)) ?></div><div><b><?= h(current_name()) ?></b><small><?= h(current_email()) ?></small></div></div></aside>

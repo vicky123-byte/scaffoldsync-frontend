@@ -1,0 +1,20 @@
+name: scaffoldsync_mobile
+description: ScaffoldSync mobile app for owner, mandor, and customer workflows.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo-scaffoldsync.png
+    - assets/products/scaffolding-frame.png
+    - assets/products/jackbase.png
+    - assets/products/clamp-fix.png
+    - assets/products/clamp-swivel.png
